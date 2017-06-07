@@ -6,10 +6,6 @@ import (
 	"os"
 )
 
-type DataPassed struct {
-  Title string
-}
-
 type MultipleDomains map[string]http.Handler
 
 func (md MultipleDomains) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +20,6 @@ func (md MultipleDomains) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // templateHandler assigns each URL to the corresponding template structure.
 func templateHandler(w http.ResponseWriter, r *http.Request) {
-	data := new(DataPassed)
   layout := "../structure.html"
 	content := "../pages/" + r.URL.Path + ".html"
 	if r.URL.Path == "/" {content = "../pages/index.html"}
@@ -47,7 +42,7 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	tmpl.ExecuteTemplate(w, "structure", data)
+	tmpl.ExecuteTemplate(w, "structure", nil)
 }
 
 // main starts the web server and routes URLS.
