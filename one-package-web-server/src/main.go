@@ -7,17 +7,7 @@ import (
 	"os"
 )
 
-type MultipleDomains map[string]http.Handler
-
-func (md MultipleDomains) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	handler := md[r.Host]
-
-	if handler != nil {
-		handler.ServeHTTP(w, r)
-	} else {
-		http.Redirect(w, r, "/", http.StatusFound)
-	}
-}
+var listenAddress = flag.String("host", "localhost:8080", "address and port to listen on, use yourdomain.com:80 for accessing online")
 
 // templateHandler assigns each URL to the corresponding template structure.
 func templateHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,21 +38,13 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "structure", nil)
 }
 
-var listenAddress = flag.String("host", "localhost:8080", "address and port to listen on")
-
 // main starts the web server and routes URLS.
 func main() {
-
 	flag.Parse()
 
-	muxex := http.NewServeMux()
+	http.Handle("/public/images/", http.StripPrefix("/public/images/", http.FileServer(http.Dir("../public/images"))))
+	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("../public"))))
+	http.HandleFunc("/", templateHandler)
 
-	md := make(MultipleDomains)
-	md["localhost:8080"] = muxex
-
-	muxex.Handle("/public/images/", http.StripPrefix("/public/images/", http.FileServer(http.Dir("../public/images"))))
-	muxex.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("../public"))))
-	muxex.HandleFunc("/", templateHandler)
-
-	http.ListenAndServe(":8080", md)
+	http.ListenAndServe(*listenAddress, nil)
 }
