@@ -7,8 +7,6 @@ import (
 	"os"
 )
 
-var listenAddress = flag.String("host", "localhost:8080", "address and port to listen on, use yourdomain.com:80 for accessing online")
-
 // templateHandler assigns each URL to the corresponding template structure.
 func templateHandler(w http.ResponseWriter, r *http.Request) {
 	layout := "../structure.html"
@@ -40,6 +38,8 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 
 // main starts the web server and routes URLS.
 func main() {
+	listenAddress := flag.String("host", "localhost:8080", "address and port to listen on, type -host=yourdomain.com:80 for accessing online")
+
 	flag.Parse()
 
 	http.Handle("/public/images/", http.StripPrefix("/public/images/", http.FileServer(http.Dir("../public/images"))))
