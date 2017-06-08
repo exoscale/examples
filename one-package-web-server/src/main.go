@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"html/template"
 	"net/http"
 	"os"
@@ -47,8 +48,13 @@ func templateHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.ExecuteTemplate(w, "structure", nil)
 }
 
+var listenAddress = flag.String("host", "localhost:8080", "address and port to listen on")
+
 // main starts the web server and routes URLS.
 func main() {
+
+	flag.Parse()
+
 	muxex := http.NewServeMux()
 
 	md := make(MultipleDomains)
