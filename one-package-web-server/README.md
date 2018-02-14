@@ -1,5 +1,5 @@
 # One package to Serve the Web
-See article [One Package to Serve the Web](https://www.exoscale.ch/syslog/one-package-webserver) on the Exoscale blog for details and explanations.
+See article [One Package to Serve the Web](https://www.exoscale.com/syslog/one-package-webserver) on the Exoscale blog for details and explanations.
 
 ## Quickstart
 front-end: HTML5, CSS
